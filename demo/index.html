@@ -60,7 +60,7 @@
 
 <div id="intro" class="scene card">
   <div class="clock fade-up" id="i1">23:47</div>
-  <h1 class="fade-up" id="i2">Клиент пишет в магазин.<br><span class="accent">Менеджер уже спит.</span></h1>
+  <h1 class="fade-up" id="i2">Клиент пишет в Būk Stilingas.<br><span class="accent">Менеджер уже спит.</span></h1>
   <p class="fade-up" id="i3">Раньше он ушёл бы к конкуренту.<br>Теперь отвечает AI-продавец 👇</p>
 </div>
 
@@ -68,8 +68,8 @@
   <div class="status"><span>23:47</span><span>LTE ▮▮▮ 82%</span></div>
   <div class="header">
     <div class="back">‹</div>
-    <div class="avatar">UF</div>
-    <div><div class="title">Urban Fit</div><div class="subtitle">● Отвечает мгновенно</div></div>
+    <div class="avatar"><img src="logo.jpg" style="width:100%;height:100%;border-radius:50%;object-fit:cover"></div>
+    <div><div class="title">Būk Stilingas</div><div class="subtitle">● Отвечает мгновенно</div></div>
   </div>
   <div class="msgs" id="msgs">
     <div class="stamp">Сегодня 23:47</div>
@@ -121,16 +121,16 @@ async function run() {
   await me('<img src="img0.jpg">', 'photo');
   await me('Добрый вечер! Сколько стоит этот костюм?');
   document.getElementById('badge').classList.add('in');
-  await bot('Добрый вечер! 👋\nЭто костюм <b>Urban Grey</b> — худи + джоггеры, 80% хлопок.\n💶 <b>59 €</b>\nРазмеры: S · M · L · XL\nПодскажите ваш рост и вес — подберу размер 🙂');
+  await bot('Добрый вечер! 👋\nЭто костюм <b>HUGO</b> — худи + джоггеры, чёрный, хлопок.\n💶 <b>79 €</b>\nРазмеры: S · M · L · XL\nПодскажите ваш рост и вес — подберу размер 🙂');
   await me('182 см, 80 кг');
   await bot('Вам подойдёт <b>L</b> — модель приталенная, в размер ✅\nК этому костюму часто берут пуховик 👇');
-  await bot('<img src="img1.jpg"><div class="info"><div class="name">Пуховик Urban Black</div><div class="price">89 €</div></div>', 'product', 700);
+  await bot('<img src="img1.jpg"><div class="info"><div class="name">Пуховик HUGO, чёрный</div><div class="price">119 €</div></div>', 'product', 700);
   await me('А сколько доставка в Ригу?');
   await bot('📦 Omniva — в любой пакомат Латвии за 1–2 дня, <b>2,99 €</b>\n🎁 От 100 € — доставка бесплатно\n💳 Оплата картой прямо в пакомате');
   await me('Беру костюм и пуховик, оба L');
-  await bot('Отлично! Итого <b>148 €</b>, доставка бесплатно 🎁\nНапишите имя, телефон и пакомат Omniva.');
+  await bot('Отлично! Итого <b>198 €</b>, доставка бесплатно 🎁\nНапишите имя, телефон и пакомат Omniva.');
   await me('Андрей, +371 2••• ••12, Rīga Origo');
-  await bot('✅ <b>Заказ №1047 принят!</b>\nКостюм Urban Grey (L) + пуховик Urban Black (L)\n💶 148 € · 📦 Omniva, Rīga Origo\nОтправим завтра, трек-номер пришлю сюда. Спасибо, Андрей!');
+  await bot('✅ <b>Заказ №1047 принят!</b>\nКостюм HUGO (L) + пуховик HUGO (L)\n💶 198 € · 📦 Omniva, Rīga Origo\nОтправим завтра, трек-номер пришлю сюда. Спасибо, Андрей!');
   await wait(1200);
 
   show('chat', false); show('outro', true); await wait(500);
