@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>AI Seller Demo</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; font-family: "Inter", "DejaVu Sans", sans-serif; }
+  .scene { position: absolute; inset: 0; transition: opacity .6s ease; }
+  .hidden { opacity: 0; pointer-events: none; }
+
+  /* Intro / outro */
+  .card { background: radial-gradient(circle at 50% 35%, #1f2a44 0%, #0b0f1a 70%); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 90px; }
+  .clock { font-size: 150px; font-weight: 700; letter-spacing: -2px; }
+  .card h1 { font-size: 72px; line-height: 1.15; font-weight: 700; margin-top: 40px; }
+  .card p { font-size: 46px; color: #b9c3d9; margin-top: 36px; line-height: 1.35; }
+  .accent { color: #4f9cff; }
+  .pills { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; margin-top: 60px; }
+  .pill { background: rgba(79,156,255,.15); border: 2px solid rgba(79,156,255,.5); color: #dbe8ff; font-size: 40px; padding: 18px 34px; border-radius: 60px; }
+  .brand { margin-top: 110px; font-size: 52px; font-weight: 700; letter-spacing: 1px; }
+  .brand small { display: block; font-size: 38px; font-weight: 400; color: #8fa0c2; margin-top: 10px; }
+  .fade-up { opacity: 0; transform: translateY(30px); transition: all .7s ease; }
+  .fade-up.in { opacity: 1; transform: none; }
+
+  /* Messenger */
+  .chat { background: #fff; display: flex; flex-direction: column; }
+  .status { height: 70px; display: flex; justify-content: space-between; align-items: center; padding: 0 50px; font-size: 32px; font-weight: 600; color: #111; }
+  .header { height: 150px; display: flex; align-items: center; padding: 0 36px; border-bottom: 2px solid #eee; gap: 26px; }
+  .back { font-size: 60px; color: #0a7cff; }
+  .avatar { width: 96px; height: 96px; border-radius: 50%; background: linear-gradient(135deg,#222,#555); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 40px; position: relative; }
+  .avatar::after { content: ""; position: absolute; right: 2px; bottom: 2px; width: 24px; height: 24px; border-radius: 50%; background: #31cc46; border: 4px solid #fff; }
+  .title { font-size: 44px; font-weight: 700; color: #111; }
+  .subtitle { font-size: 30px; color: #31a24c; margin-top: 4px; }
+  .msgs { flex: 1; overflow: hidden; padding: 30px 36px; display: flex; flex-direction: column; gap: 18px; justify-content: flex-end; }
+  .msg { max-width: 78%; font-size: 40px; line-height: 1.32; padding: 24px 32px; border-radius: 44px; opacity: 0; transform: translateY(20px) scale(.97); transition: all .35s ease; white-space: pre-line; }
+  .msg.in { opacity: 1; transform: none; }
+  .me { align-self: flex-end; background: #0a7cff; color: #fff; border-bottom-right-radius: 12px; }
+  .bot { align-self: flex-start; background: #f0f0f0; color: #111; border-bottom-left-radius: 12px; }
+  .photo { padding: 0; background: none; overflow: hidden; border-radius: 36px; max-width: 52%; }
+  .photo img { display: block; width: 100%; }
+  .product { padding: 0; overflow: hidden; background: #f0f0f0; width: 62%; }
+  .product img { width: 100%; height: 470px; object-fit: cover; object-position: top; display: block; }
+  .product .info { padding: 22px 30px 26px; }
+  .product .name { font-weight: 700; }
+  .product .price { color: #0a7cff; font-weight: 700; margin-top: 6px; }
+  .typing { align-self: flex-start; background: #f0f0f0; border-radius: 44px; padding: 30px 36px; display: none; gap: 12px; }
+  .typing.on { display: flex; }
+  .typing span { width: 18px; height: 18px; border-radius: 50%; background: #999; animation: blink 1s infinite; }
+  .typing span:nth-child(2) { animation-delay: .2s; } .typing span:nth-child(3) { animation-delay: .4s; }
+  @keyframes blink { 0%,100% { opacity: .3 } 50% { opacity: 1 } }
+  .stamp { align-self: center; font-size: 28px; color: #999; }
+  .inputbar { height: 140px; border-top: 2px solid #eee; display: flex; align-items: center; padding: 0 36px; gap: 24px; }
+  .field { flex: 1; height: 88px; border-radius: 44px; background: #f0f0f0; display: flex; align-items: center; padding: 0 36px; font-size: 38px; color: #999; }
+  .send { font-size: 56px; color: #0a7cff; }
+  .badge { position: absolute; top: 250px; right: 40px; background: #111; color: #fff; font-size: 32px; padding: 16px 28px; border-radius: 40px; opacity: 0; transition: opacity .4s; }
+  .badge.in { opacity: .92; }
+</style>
+</head>
+<body>
+
+<div id="intro" class="scene card">
+  <div class="clock fade-up" id="i1">23:47</div>
+  <h1 class="fade-up" id="i2">Клиент пишет в магазин.<br><span class="accent">Менеджер уже спит.</span></h1>
+  <p class="fade-up" id="i3">Раньше он ушёл бы к конкуренту.<br>Теперь отвечает AI-продавец 👇</p>
+</div>
+
+<div id="chat" class="scene chat hidden">
+  <div class="status"><span>23:47</span><span>LTE ▮▮▮ 82%</span></div>
+  <div class="header">
+    <div class="back">‹</div>
+    <div class="avatar">UF</div>
+    <div><div class="title">Urban Fit</div><div class="subtitle">● Отвечает мгновенно</div></div>
+  </div>
+  <div class="msgs" id="msgs">
+    <div class="stamp">Сегодня 23:47</div>
+    <div class="typing" id="typing"><span></span><span></span><span></span></div>
+  </div>
+  <div class="inputbar"><div class="field">Сообщение…</div><div class="send">➤</div></div>
+  <div class="badge" id="badge">⚡ ответ за 3 сек</div>
+</div>
+
+<div id="outro" class="scene card hidden">
+  <h1 class="fade-up" id="o1">Заказ оформлен за <span class="accent">1 минуту.</span><br>Без менеджера.</h1>
+  <div class="pills fade-up" id="o2">
+    <div class="pill">⚡ Ответ за секунды</div>
+    <div class="pill">🌙 24/7</div>
+    <div class="pill">📏 Подбор размера</div>
+    <div class="pill">🌍 LV · RU · LT · EN</div>
+    <div class="pill">📦 Omniva / DPD</div>
+  </div>
+  <p class="fade-up" id="o3">Messenger · Instagram · WhatsApp · Telegram</p>
+  <div class="brand fade-up" id="o4">AI-продавец для вашего магазина<small>BalticMind · balticmind.lv</small></div>
+</div>
+
+<script>
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const msgs = document.getElementById('msgs');
+const typing = document.getElementById('typing');
+
+function add(html, cls) {
+  const d = document.createElement('div');
+  d.className = 'msg ' + cls;
+  d.innerHTML = html;
+  msgs.insertBefore(d, typing);
+  requestAnimationFrame(() => requestAnimationFrame(() => d.classList.add('in')));
+}
+async function me(html, cls = '') { add(html, 'me ' + cls); await wait(1400); }
+async function bot(html, cls = '', think = 1000) {
+  typing.classList.add('on'); await wait(think);
+  typing.classList.remove('on'); add(html, 'bot ' + cls);
+  await wait(Math.max(1600, html.length * 26));
+}
+const show = (id, on) => document.getElementById(id).classList.toggle('hidden', !on);
+const rise = id => document.getElementById(id).classList.add('in');
+
+async function run() {
+  await wait(400);
+  rise('i1'); await wait(900); rise('i2'); await wait(1500); rise('i3'); await wait(2600);
+  show('intro', false); show('chat', true); await wait(800);
+
+  await me('<img src="img0.jpg">', 'photo');
+  await me('Добрый вечер! Сколько стоит этот костюм?');
+  document.getElementById('badge').classList.add('in');
+  await bot('Добрый вечер! 👋\nЭто костюм <b>Urban Grey</b> — худи + джоггеры, 80% хлопок.\n💶 <b>59 €</b>\nРазмеры: S · M · L · XL\nПодскажите ваш рост и вес — подберу размер 🙂');
+  await me('182 см, 80 кг');
+  await bot('Вам подойдёт <b>L</b> — модель приталенная, в размер ✅\nК этому костюму часто берут пуховик 👇');
+  await bot('<img src="img1.jpg"><div class="info"><div class="name">Пуховик Urban Black</div><div class="price">89 €</div></div>', 'product', 700);
+  await me('А сколько доставка в Ригу?');
+  await bot('📦 Omniva — в любой пакомат Латвии за 1–2 дня, <b>2,99 €</b>\n🎁 От 100 € — доставка бесплатно\n💳 Оплата картой прямо в пакомате');
+  await me('Беру костюм и пуховик, оба L');
+  await bot('Отлично! Итого <b>148 €</b>, доставка бесплатно 🎁\nНапишите имя, телефон и пакомат Omniva.');
+  await me('Андрей, +371 2••• ••12, Rīga Origo');
+  await bot('✅ <b>Заказ №1047 принят!</b>\nКостюм Urban Grey (L) + пуховик Urban Black (L)\n💶 148 € · 📦 Omniva, Rīga Origo\nОтправим завтра, трек-номер пришлю сюда. Спасибо, Андрей!');
+  await wait(1200);
+
+  show('chat', false); show('outro', true); await wait(500);
+  rise('o1'); await wait(1300); rise('o2'); await wait(1300); rise('o3'); await wait(900); rise('o4');
+  await wait(3500);
+  window.__done = true;
+}
+window.__start = run;
+</script>
+</body>
+</html>
