@@ -134,6 +134,9 @@ document.querySelectorAll('[data-t]').forEach(el => el.innerHTML = L[el.dataset.
 document.getElementById('o2').innerHTML = L.pills.map(p => `<div class="pill">${p}</div>`).join('');
 
 const wait = ms => new Promise(r => setTimeout(r, ms));
+// Sound cue log for the soundtrack builder (epoch ms)
+window.__events = [];
+const cue = type => window.__events.push({ t: performance.timeOrigin + performance.now(), type });
 const msgs = document.getElementById('msgs');
 const typing = document.getElementById('typing');
 
@@ -142,6 +145,7 @@ function add(html, cls) {
   d.className = cls;
   d.innerHTML = html;
   msgs.insertBefore(d, typing);
+  cue(cls.includes('me') ? 'sent' : cls.includes('bot') ? 'recv' : 'stamp');
   requestAnimationFrame(() => requestAnimationFrame(() => d.classList.add('in')));
   return d;
 }
@@ -154,10 +158,11 @@ async function bot(html, think = 1000) {
   return d;
 }
 async function stamp(text) { add(text, 'stamp'); await wait(900); }
-const show = (id, on) => document.getElementById(id).classList.toggle('hidden', !on);
+const show = (id, on) => { if (on) cue('whoosh'); document.getElementById(id).classList.toggle('hidden', !on); };
 const rise = id => document.getElementById(id).classList.add('in');
 
 async function run() {
+  cue('start');
   await wait(400);
   rise('i1'); await wait(900); rise('i2'); await wait(1500); rise('i3'); await wait(2600);
   show('intro', false); show('chat', true); await wait(800);
@@ -168,7 +173,7 @@ async function run() {
   await bot(L.b1);
   await me(L.m2);
   const slots = await bot(L.b2 + '<div class="chips">' + L.chips.map(c => `<span class="chip">${c}</span>`).join('') + '</div>');
-  slots.querySelectorAll('.chip')[1].classList.add('pick'); await wait(600);
+  slots.querySelectorAll('.chip')[1].classList.add('pick'); cue('tap'); await wait(600);
   await me(L.m3);
   await bot(L.b3);
   await me(L.m4);
@@ -181,7 +186,7 @@ async function run() {
   await wait(800);
 
   show('chat', false); show('outro', true); await wait(500);
-  rise('o1'); await wait(1300); rise('o2'); await wait(1300); rise('o3'); await wait(900); rise('o4');
+  rise('o1'); cue('chime'); await wait(1300); rise('o2'); await wait(1300); rise('o3'); await wait(900); rise('o4');
   await wait(3500);
   window.__done = true;
 }
