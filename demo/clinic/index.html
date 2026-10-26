@@ -1,0 +1,191 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Clinic Booking Demo</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; font-family: "Inter", "DejaVu Sans", sans-serif; }
+  .scene { position: absolute; inset: 0; transition: opacity .6s ease; }
+  .hidden { opacity: 0; pointer-events: none; }
+
+  .card { background: radial-gradient(circle at 50% 35%, #0f3d3a 0%, #071a19 72%); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 90px; }
+  .clock { font-size: 150px; font-weight: 700; letter-spacing: -2px; }
+  .card h1 { font-size: 70px; line-height: 1.18; font-weight: 700; margin-top: 40px; }
+  .card p { font-size: 44px; color: #b5d6d2; margin-top: 36px; line-height: 1.38; }
+  .accent { color: #3ddc97; }
+  .pills { display: flex; flex-wrap: wrap; gap: 22px; justify-content: center; margin-top: 60px; }
+  .pill { background: rgba(61,220,151,.13); border: 2px solid rgba(61,220,151,.5); color: #dcf7ec; font-size: 38px; padding: 18px 32px; border-radius: 60px; }
+  .brand { margin-top: 100px; font-size: 52px; font-weight: 700; }
+  .brand small { display: block; font-size: 38px; font-weight: 400; color: #8fb8b2; margin-top: 10px; }
+  .fade-up { opacity: 0; transform: translateY(30px); transition: all .7s ease; }
+  .fade-up.in { opacity: 1; transform: none; }
+
+  /* WhatsApp-like chat */
+  .chat { background: #efeae2; display: flex; flex-direction: column; }
+  .status { height: 70px; background: #075e54; display: flex; justify-content: space-between; align-items: center; padding: 0 50px; font-size: 32px; font-weight: 600; color: #fff; }
+  .header { height: 150px; background: #075e54; display: flex; align-items: center; padding: 0 36px; gap: 26px; color: #fff; }
+  .back { font-size: 60px; }
+  .avatar { width: 96px; height: 96px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 54px; }
+  .title { font-size: 44px; font-weight: 700; }
+  .subtitle { font-size: 30px; color: #b8e6dc; margin-top: 4px; }
+  .msgs { flex: 1; overflow: hidden; padding: 30px 36px; display: flex; flex-direction: column; gap: 18px; justify-content: flex-end; }
+  .msg { max-width: 80%; font-size: 40px; line-height: 1.34; padding: 22px 30px; border-radius: 26px; opacity: 0; transform: translateY(20px) scale(.97); transition: all .35s ease; white-space: pre-line; box-shadow: 0 2px 2px rgba(0,0,0,.08); color: #111; }
+  .msg.in { opacity: 1; transform: none; }
+  .me { align-self: flex-end; background: #d9fdd3; border-top-right-radius: 6px; }
+  .bot { align-self: flex-start; background: #fff; border-top-left-radius: 6px; }
+  .chips { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 18px; white-space: normal; }
+  .chip { border: 3px solid #00a884; color: #00866a; font-weight: 700; font-size: 36px; padding: 12px 24px; border-radius: 40px; transition: all .3s; }
+  .chip.pick { background: #00a884; color: #fff; }
+  .typing { align-self: flex-start; background: #fff; border-radius: 26px; padding: 30px 36px; display: none; gap: 12px; }
+  .typing.on { display: flex; }
+  .typing span { width: 18px; height: 18px; border-radius: 50%; background: #999; animation: blink 1s infinite; }
+  .typing span:nth-child(2) { animation-delay: .2s; } .typing span:nth-child(3) { animation-delay: .4s; }
+  @keyframes blink { 0%,100% { opacity: .3 } 50% { opacity: 1 } }
+  .stamp { align-self: center; font-size: 30px; color: #54656f; background: #fff; padding: 10px 26px; border-radius: 16px; opacity: 0; transition: opacity .4s; }
+  .stamp.in { opacity: 1; }
+  .inputbar { height: 140px; display: flex; align-items: center; padding: 0 30px; gap: 22px; }
+  .field { flex: 1; height: 92px; border-radius: 46px; background: #fff; display: flex; align-items: center; padding: 0 36px; font-size: 38px; color: #999; }
+  .mic { width: 92px; height: 92px; border-radius: 50%; background: #00a884; color: #fff; font-size: 44px; display: flex; align-items: center; justify-content: center; }
+  .badge { position: absolute; top: 250px; right: 40px; background: #111; color: #fff; font-size: 32px; padding: 16px 28px; border-radius: 40px; opacity: 0; transition: opacity .4s; }
+  .badge.in { opacity: .9; }
+</style>
+</head>
+<body>
+
+<div id="intro" class="scene card">
+  <div class="clock fade-up" id="i1">22:40</div>
+  <h1 class="fade-up" id="i2" data-t="introH"></h1>
+  <p class="fade-up" id="i3" data-t="introP"></p>
+</div>
+
+<div id="chat" class="scene chat hidden">
+  <div class="status"><span>22:40</span><span>LTE ▮▮▮ 76%</span></div>
+  <div class="header">
+    <div class="back">←</div>
+    <div class="avatar">🦷</div>
+    <div><div class="title">Demo klīnika</div><div class="subtitle" data-t="online"></div></div>
+  </div>
+  <div class="msgs" id="msgs">
+    <div class="typing" id="typing"><span></span><span></span><span></span></div>
+  </div>
+  <div class="inputbar"><div class="field" data-t="input"></div><div class="mic">🎤</div></div>
+  <div class="badge" id="badge" data-t="badge"></div>
+</div>
+
+<div id="outro" class="scene card hidden">
+  <h1 class="fade-up" id="o1" data-t="outroH"></h1>
+  <div class="pills fade-up" id="o2"></div>
+  <p class="fade-up" id="o3" data-t="channels"></p>
+  <div class="brand fade-up" id="o4" data-t="brand"></div>
+</div>
+
+<script>
+const T = {
+  ru: {
+    introH: 'Пациент хочет записаться к врачу.<br><span class="accent">Регистратура уже закрыта.</span>',
+    introP: 'Раньше он позвонил бы утром — или в другую клинику.<br>Теперь записывает AI-ассистент 👇',
+    online: '● отвечает мгновенно', input: 'Сообщение', badge: '⚡ ответ за 3 сек',
+    today: 'Сегодня', tomorrow: 'Завтра 12:00',
+    m1: 'Добрый вечер! Болит зуб, можно записаться к стоматологу?',
+    b1: 'Добрый вечер! 👋 Сочувствую. Запишу вас к стоматологу.\nВы у нас впервые?',
+    m2: 'Да, впервые',
+    b2: 'Первичная консультация — <b>35 €</b> (осмотр + план лечения).\nБлижайшее свободное время у <b>dr. Liepa</b>:',
+    chips: ['Завтра 09:30', 'Завтра 14:00', 'Ср 17:15'],
+    m3: 'Завтра 14:00',
+    b3: 'Отлично! Напишите, пожалуйста, имя, фамилию и телефон.',
+    m4: 'Анна Петрова, +371 2••• ••45',
+    b4: '✅ <b>Вы записаны!</b>\n🦷 Стоматолог dr. Liepa\n📅 Завтра, 27.10, в 14:00\n💶 Консультация 35 €\nНапомню за 2 часа. Если планы изменятся — просто напишите сюда, перенесу запись.',
+    b5: '🔔 <b>Напоминание:</b> сегодня в 14:00 вас ждёт dr. Liepa.\nПодтвердите, пожалуйста: придёте?',
+    m5: 'Да, приду 👍',
+    b6: 'Спасибо, Анна! До встречи 🙂',
+    outroH: 'Запись за 1 минуту.<br><span class="accent">Без звонков и очередей.</span>',
+    pills: ['🕐 Запись 24/7', '🔔 Напоминания — меньше неявок', '📅 Синхронизация с календарём', '🌍 LV · RU · EN', '👩‍⚕️ Сложные вопросы — администратору'],
+    channels: 'WhatsApp · Messenger · Instagram · сайт',
+    brand: 'AI-администратор для вашей клиники<small>BalticMind · balticmind.lv</small>'
+  },
+  lv: {
+    introH: 'Pacients vēlas pierakstīties pie ārsta.<br><span class="accent">Reģistratūra jau ir slēgta.</span>',
+    introP: 'Agrāk viņš zvanītu no rīta — vai citai klīnikai.<br>Tagad pieraksta MI asistents 👇',
+    online: '● atbild uzreiz', input: 'Ziņojums', badge: '⚡ atbilde 3 sek.',
+    today: 'Šodien', tomorrow: 'Rīt 12:00',
+    m1: 'Labvakar! Sāp zobs, vai var pierakstīties pie zobārsta?',
+    b1: 'Labvakar! 👋 Žēl to dzirdēt. Pierakstīšu jūs pie zobārsta.\nVai esat pie mums pirmo reizi?',
+    m2: 'Jā, pirmo reizi',
+    b2: 'Pirmreizējā konsultācija — <b>35 €</b> (apskate + ārstēšanas plāns).\nTuvākie brīvie laiki pie <b>dr. Liepas</b>:',
+    chips: ['Rīt 09:30', 'Rīt 14:00', 'Tr 17:15'],
+    m3: 'Rīt 14:00',
+    b3: 'Lieliski! Lūdzu, uzrakstiet savu vārdu, uzvārdu un tālruni.',
+    m4: 'Anna Kalniņa, +371 2••• ••45',
+    b4: '✅ <b>Jūs esat pierakstīta!</b>\n🦷 Zobārste dr. Liepa\n📅 Rīt, 27.10., plkst. 14:00\n💶 Konsultācija 35 €\nAtgādināšu 2 stundas iepriekš. Ja plāni mainās — vienkārši uzrakstiet šeit, un es pārcelšu pierakstu.',
+    b5: '🔔 <b>Atgādinājums:</b> šodien plkst. 14:00 jūs gaida dr. Liepa.\nLūdzu, apstipriniet — vai ieradīsieties?',
+    m5: 'Jā, būšu 👍',
+    b6: 'Paldies, Anna! Uz tikšanos 🙂',
+    outroH: 'Pieraksts 1 minūtē.<br><span class="accent">Bez zvaniem un rindām.</span>',
+    pills: ['🕐 Pieraksts 24/7', '🔔 Atgādinājumi — mazāk neieradušos pacientu', '📅 Sinhronizācija ar kalendāru', '🌍 LV · RU · EN', '👩‍⚕️ Sarežģīti jautājumi — administratoram'],
+    channels: 'WhatsApp · Messenger · Instagram · mājaslapa',
+    brand: 'MI administrators jūsu klīnikai<small>BalticMind · balticmind.lv</small>'
+  }
+};
+const lang = new URLSearchParams(location.search).get('lang') || 'ru';
+const L = T[lang];
+document.documentElement.lang = lang;
+document.querySelectorAll('[data-t]').forEach(el => el.innerHTML = L[el.dataset.t]);
+document.getElementById('o2').innerHTML = L.pills.map(p => `<div class="pill">${p}</div>`).join('');
+
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const msgs = document.getElementById('msgs');
+const typing = document.getElementById('typing');
+
+function add(html, cls) {
+  const d = document.createElement('div');
+  d.className = cls;
+  d.innerHTML = html;
+  msgs.insertBefore(d, typing);
+  requestAnimationFrame(() => requestAnimationFrame(() => d.classList.add('in')));
+  return d;
+}
+async function me(html) { add(html, 'msg me'); await wait(1100); }
+async function bot(html, think = 1000) {
+  typing.classList.add('on'); await wait(think);
+  typing.classList.remove('on');
+  const d = add(html, 'msg bot');
+  await wait(Math.max(1600, html.length * 26));
+  return d;
+}
+async function stamp(text) { add(text, 'stamp'); await wait(900); }
+const show = (id, on) => document.getElementById(id).classList.toggle('hidden', !on);
+const rise = id => document.getElementById(id).classList.add('in');
+
+async function run() {
+  await wait(400);
+  rise('i1'); await wait(900); rise('i2'); await wait(1500); rise('i3'); await wait(2600);
+  show('intro', false); show('chat', true); await wait(800);
+
+  await stamp(L.today);
+  await me(L.m1);
+  document.getElementById('badge').classList.add('in');
+  await bot(L.b1);
+  await me(L.m2);
+  const slots = await bot(L.b2 + '<div class="chips">' + L.chips.map(c => `<span class="chip">${c}</span>`).join('') + '</div>');
+  slots.querySelectorAll('.chip')[1].classList.add('pick'); await wait(600);
+  await me(L.m3);
+  await bot(L.b3);
+  await me(L.m4);
+  await bot(L.b4);
+  await wait(400);
+  await stamp(L.tomorrow);
+  await bot(L.b5);
+  await me(L.m5);
+  await bot(L.b6, 800);
+  await wait(800);
+
+  show('chat', false); show('outro', true); await wait(500);
+  rise('o1'); await wait(1300); rise('o2'); await wait(1300); rise('o3'); await wait(900); rise('o4');
+  await wait(3500);
+  window.__done = true;
+}
+window.__start = run;
+</script>
+</body>
+</html>
