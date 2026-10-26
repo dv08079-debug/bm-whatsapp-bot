@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="lv">
+<head>
+<meta charset="utf-8">
+<title>Salon Booking Demo</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; font-family: "Inter", "DejaVu Sans", sans-serif; }
+  .scene { position: absolute; inset: 0; transition: opacity .6s ease; }
+  .hidden { opacity: 0; pointer-events: none; }
+
+  /* Outro card in salon pastel palette */
+  .card { background: radial-gradient(circle at 50% 35%, #fbe3ea 0%, #f3c9d6 45%, #e7aec1 100%); color: #3b1f2b; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 90px; }
+  .card h1 { font-size: 74px; line-height: 1.18; font-weight: 800; }
+  .card p { font-size: 42px; color: #6b3a4d; margin-top: 40px; line-height: 1.38; }
+  .accent { color: #b0306a; }
+  .pills { display: flex; flex-wrap: wrap; gap: 22px; justify-content: center; margin-top: 60px; }
+  .pill { background: rgba(255,255,255,.6); border: 2px solid rgba(176,48,106,.35); color: #4a2434; font-size: 38px; padding: 18px 32px; border-radius: 60px; }
+  .brand { margin-top: 100px; font-size: 52px; font-weight: 800; }
+  .brand small { display: block; font-size: 38px; font-weight: 500; color: #7a4a5c; margin-top: 10px; }
+  .fade-up { opacity: 0; transform: translateY(30px); transition: all .7s ease; }
+  .fade-up.in { opacity: 1; transform: none; }
+
+  /* WhatsApp-like chat */
+  .chat { background: #efeae2; display: flex; flex-direction: column; }
+  .status { height: 70px; background: #075e54; display: flex; justify-content: space-between; align-items: center; padding: 0 50px; font-size: 32px; font-weight: 600; color: #fff; }
+  .header { height: 150px; background: #075e54; display: flex; align-items: center; padding: 0 36px; gap: 26px; color: #fff; }
+  .back { font-size: 60px; }
+  .avatar { width: 96px; height: 96px; border-radius: 50%; background: #fbe3ea; display: flex; align-items: center; justify-content: center; font-size: 54px; }
+  .title { font-size: 44px; font-weight: 700; }
+  .subtitle { font-size: 30px; color: #b8e6dc; margin-top: 4px; }
+  .msgs { flex: 1; overflow: hidden; padding: 30px 36px; display: flex; flex-direction: column; gap: 18px; justify-content: flex-end; }
+  .msg { max-width: 80%; font-size: 40px; line-height: 1.34; padding: 22px 30px; border-radius: 26px; opacity: 0; transform: translateY(20px) scale(.97); transition: all .35s ease; white-space: pre-line; box-shadow: 0 2px 2px rgba(0,0,0,.08); color: #111; }
+  .msg.in { opacity: 1; transform: none; }
+  .me { align-self: flex-end; background: #d9fdd3; border-top-right-radius: 6px; }
+  .bot { align-self: flex-start; background: #fff; border-top-left-radius: 6px; }
+  .chips { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 18px; white-space: normal; }
+  .chip { border: 3px solid #00a884; color: #00866a; font-weight: 700; font-size: 36px; padding: 12px 24px; border-radius: 40px; transition: all .3s; }
+  .chip.pick { background: #00a884; color: #fff; }
+  .typing { align-self: flex-start; background: #fff; border-radius: 26px; padding: 30px 36px; display: none; gap: 12px; }
+  .typing.on { display: flex; }
+  .typing span { width: 18px; height: 18px; border-radius: 50%; background: #999; animation: blink 1s infinite; }
+  .typing span:nth-child(2) { animation-delay: .2s; } .typing span:nth-child(3) { animation-delay: .4s; }
+  @keyframes blink { 0%,100% { opacity: .3 } 50% { opacity: 1 } }
+  .stamp { align-self: center; font-size: 30px; color: #54656f; background: #fff; padding: 10px 26px; border-radius: 16px; opacity: 0; transition: opacity .4s; }
+  .stamp.in { opacity: 1; }
+  .inputbar { height: 140px; display: flex; align-items: center; padding: 0 30px; gap: 22px; }
+  .field { flex: 1; height: 92px; border-radius: 46px; background: #fff; display: flex; align-items: center; padding: 0 36px; font-size: 38px; color: #999; }
+  .mic { width: 92px; height: 92px; border-radius: 50%; background: #00a884; color: #fff; font-size: 44px; display: flex; align-items: center; justify-content: center; }
+  .badge { position: absolute; top: 250px; right: 40px; background: #111; color: #fff; font-size: 32px; padding: 16px 28px; border-radius: 40px; opacity: 0; transition: opacity .4s; }
+  .badge.in { opacity: .9; }
+</style>
+</head>
+<body>
+
+<div id="chat" class="scene chat">
+  <div class="status"><span>23:02</span><span>LTE ▮▮▮ 64%</span></div>
+  <div class="header">
+    <div class="back">←</div>
+    <div class="avatar">💅</div>
+    <div><div class="title">Demo Beauty Studio</div><div class="subtitle">● atbild uzreiz</div></div>
+  </div>
+  <div class="msgs" id="msgs">
+    <div class="typing" id="typing"><span></span><span></span><span></span></div>
+  </div>
+  <div class="inputbar"><div class="field">Ziņojums</div><div class="mic">🎤</div></div>
+  <div class="badge" id="badge">⚡ atbilde 3 sek.</div>
+</div>
+
+<div id="outro" class="scene card hidden">
+  <h1 class="fade-up" id="o1">Pieraksts 1 minūtē.<br><span class="accent">Arī naktī un brīvdienās.</span></h1>
+  <div class="pills fade-up" id="o2">
+    <div class="pill">🕐 Pieraksts 24/7</div>
+    <div class="pill">💅 Brīvie laiki katrai meistarei</div>
+    <div class="pill">✨ Papildpakalpojumi</div>
+    <div class="pill">🔔 Atgādinājumi</div>
+    <div class="pill">🌍 LV · RU · EN</div>
+  </div>
+  <p class="fade-up" id="o3">WhatsApp · Instagram · Messenger · mājaslapa</p>
+  <div class="brand fade-up" id="o4">MI administrators jūsu salonam<small>BalticMind · balticmind.lv</small></div>
+</div>
+
+<script>
+const wait = ms => new Promise(r => setTimeout(r, ms));
+// Sound cue log for the soundtrack builder (epoch ms)
+window.__events = [];
+const cue = type => window.__events.push({ t: performance.timeOrigin + performance.now(), type });
+const msgs = document.getElementById('msgs');
+const typing = document.getElementById('typing');
+
+function add(html, cls) {
+  const d = document.createElement('div');
+  d.className = cls;
+  d.innerHTML = html;
+  msgs.insertBefore(d, typing);
+  cue(cls.includes('me') ? 'sent' : cls.includes('bot') ? 'recv' : 'stamp');
+  requestAnimationFrame(() => requestAnimationFrame(() => d.classList.add('in')));
+  return d;
+}
+async function me(html) { add(html, 'msg me'); await wait(1100); }
+async function bot(html, think = 900) {
+  typing.classList.add('on'); await wait(think);
+  typing.classList.remove('on');
+  const d = add(html, 'msg bot');
+  await wait(Math.max(1500, html.length * 24));
+  return d;
+}
+const show = (id, on) => { if (on) cue('whoosh'); document.getElementById(id).classList.toggle('hidden', !on); };
+const rise = id => document.getElementById(id).classList.add('in');
+
+async function run() {
+  cue('start');
+  await wait(500);
+  add('Šodien', 'stamp'); await wait(700);
+  await me('Labvakar! Vai rīt var pierakstīties uz manikīru ar gēla laku? 💅');
+  document.getElementById('badge').classList.add('in');
+  const slots = await bot('Labvakar! 💖 Protams! Manikīrs ar gēla laku — <b>35 €</b>, ~1,5 h.\nRīt brīvie laiki pie meistares <b>Lauras</b>:<div class="chips"><span class="chip">10:00</span><span class="chip">13:30</span><span class="chip">17:00</span></div>');
+  slots.querySelectorAll('.chip')[2].classList.add('pick'); cue('tap'); await wait(600);
+  await me('17:00');
+  await bot('Lieliski! Lūdzu, uzrakstiet savu vārdu un tālruni.');
+  await me('Elīna, +371 2••• ••78');
+  await bot('✅ <b>Jūs esat pierakstīta!</b>\n💅 Manikīrs ar gēla laku — Laura\n📅 Rīt, plkst. 17:00 · 35 €\nVai pievienot arī uzacu korekciju? (+10 €)');
+  await me('Jā, pievienojiet! 😍');
+  await bot('Pievienots 💖 Kopā <b>45 €</b>.\nAtgādināšu 3 stundas iepriekš. Uz tikšanos!', 800);
+  await wait(900);
+  cue('chat_end');
+
+  show('chat', false); show('outro', true); await wait(500);
+  rise('o1'); cue('chime'); await wait(1200); rise('o2'); await wait(1200); rise('o3'); await wait(800); rise('o4');
+  await wait(3200);
+  window.__done = true;
+}
+window.__start = run;
+</script>
+</body>
+</html>
