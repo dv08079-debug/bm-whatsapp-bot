@@ -1,0 +1,94 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Celmiņu 37 - проект</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&display=swap">
+<style>
+  :root{
+    --bg:#f4f2ec; --panel:#fffdf9; --ink:#23261f; --muted:#6a6f61; --line:#ded9cc;
+    --accent:#5a7d3f; --accent-ink:#3c5a28; --card-sh:0 2px 14px rgba(40,40,30,.08);
+    --font-h:"Outfit",system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --bg:#17190f; --panel:#20231a; --ink:#ece9df; --muted:#a3a695; --line:#353829;
+    --accent:#9ac56f; --accent-ink:#b4d98c; --card-sh:0 2px 16px rgba(0,0,0,.4);
+    color-scheme:dark;
+  }}
+  :root[data-theme="dark"]{
+    --bg:#17190f; --panel:#20231a; --ink:#ece9df; --muted:#a3a695; --line:#353829;
+    --accent:#9ac56f; --accent-ink:#b4d98c; --card-sh:0 2px 16px rgba(0,0,0,.4);
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);margin:0;
+    font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;
+    padding-left:max(16px,env(safe-area-inset-left,0px));
+    padding-right:max(16px,env(safe-area-inset-right,0px));
+    padding-block:30px;}
+  .wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+  header h1{font-family:var(--font-h);font-weight:800;font-size:clamp(28px,6vw,42px);
+    margin:0;letter-spacing:-.6px}
+  header p{margin:.5em 0 0;color:var(--muted);max-width:60ch;font-size:17px}
+  .fig{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+    overflow:hidden;box-shadow:var(--card-sh)}
+  .fig img{display:block;width:100%;height:auto}
+  .cap{padding:13px 18px 16px;font-family:var(--font-h);font-weight:600;font-size:16px}
+  .cap small{display:block;color:var(--muted);font-weight:500;font-size:14px;margin-top:3px}
+  .sec{font-family:var(--font-h);font-weight:700;font-size:13px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--accent-ink);margin:8px 2px -8px}
+  .note{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 22px}
+  .note h2{font-family:var(--font-h);font-size:13px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--muted);margin:0 0 10px}
+  .note ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:8px}
+  .note b{color:var(--accent-ink)}
+  a.plan{display:inline-block;margin-top:4px;color:var(--accent-ink);font-weight:600}
+  footer{color:var(--muted);font-size:13px;text-align:center;padding-top:4px}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Celmiņu iela 37</h1>
+    <p>Проект отделки и благоустройства. Вертикальный деревянный фасад, угловой участок, парковка у гаража, зона барбекю и сад. Визуализации сделаны на основе реальных фото дома.</p>
+  </header>
+
+  <div class="sec">Вид с улицы</div>
+  <figure class="fig">
+    <img src="dark-front.jpg" alt="Фасад со стороны улицы">
+    <figcaption class="cap">Главный фасад<small>Тёмное вертикальное дерево, тёмные окна и двери</small></figcaption>
+  </figure>
+
+  <div class="sec">Гараж и въезд</div>
+  <figure class="fig">
+    <img src="dark-garage1.jpg" alt="Угол участка с гаражом">
+    <figcaption class="cap">Угол участка<small>Гараж и парковка-брусчатка у въезда</small></figcaption>
+  </figure>
+  <figure class="fig">
+    <img src="dark-garage2.jpg" alt="Гараж со стороны боковой дороги">
+    <figcaption class="cap">Со стороны заездной дороги<small>Ворота гаража, парковка, живая изгородь</small></figcaption>
+  </figure>
+
+  <div class="sec">Двор</div>
+  <figure class="fig">
+    <img src="dark-backyard.jpg" alt="Вид со двора">
+    <figcaption class="cap">Садовая сторона<small>Терраса, навес-барбекю 3×6, газон, теплица</small></figcaption>
+  </figure>
+
+  <div class="sec">Светлый вариант</div>
+  <figure class="fig">
+    <img src="match-front.jpg" alt="Светлый вариант фасада">
+    <figcaption class="cap">Альтернатива: светлое дерево<small>Светлый фасад, окна и двери в тон стенам</small></figcaption>
+  </figure>
+
+  <div class="note">
+    <h2>Что в проекте</h2>
+    <ul>
+      <li><b>Фасад:</b> вертикальная деревянная обшивка (два варианта - тёмный и светлый).</li>
+      <li><b>Парковка у гаража</b> на 3–4 авто, брусчатка, прямо у въезда с заездной дороги.</li>
+      <li><b>Навес 3×6 для барбекю</b> на солнечной стороне у газона.</li>
+      <li><b>Двор:</b> газон, туи и кусты вдоль фасада, живая изгородь вдоль обеих дорог.</li>
+      <li><b>Уже есть на участке:</b> теплица и батут - оставлены в плане.</li>
+      <li><b>Дренаж и ливнёвка</b> вокруг дома - заложить до газона и брусчатки.</li>
+    </ul>
+    <a class="plan" href="https://claude.ai/artifact/Bk2UQ7Bi7gJZUv2FbCFbvm" target="_blank" rel="noopener">→ Схема зонирования участка (план сверху)</a>
+  </div>
+
+  <footer>Визуализации - AI по реальным фото дома, для оценки стиля. Не точный рабочий проект и не точный масштаб.</footer>
+</div>
