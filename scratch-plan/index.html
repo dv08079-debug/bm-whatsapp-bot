@@ -1,0 +1,197 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Участок Celmiņu 37</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&display=swap">
+<style>
+  /* Layout: a top-view site plan (SVG) of a corner plot, matching the MBI genplan orientation */
+  :root{
+    --bg:#f6f4ef; --panel:#fffdf9; --ink:#23261f; --muted:#6a6f61; --line:#d9d5c8;
+    --lawn:#bcd99b; --lawn-line:#8fb86a;
+    --paving:#cfc9bd; --paving-line:#a8a192;
+    --road:#e7ddc8; --road-line:#c3b48f;
+    --house:#c9d6e3; --house-line:#7d94aa;
+    --garage:#e6d2b5; --garage-line:#bd9f78;
+    --terrace:#e4c9a6; --terrace-line:#c39a63;
+    --garden:#e7b7a6; --garden-line:#c67e65;
+    --green:#a6d9c4; --green-line:#5bbd93;
+    --kids:#e6c7e0; --kids-line:#bd78b0;
+    --water:#9ec6e0; --water-line:#5b93bd;
+    --wood:#c9a37a; --wood-line:#9a7245;
+    --tree:#6fae5a; --tree-line:#3f7a30;
+    --accent:#4f7a3a;
+    --font-h:"Outfit",system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --bg:#1b1d17; --panel:#24271f; --ink:#ece9df; --muted:#a3a695; --line:#3a3d32;
+    --lawn:#5f7a43; --lawn-line:#86a85f; --paving:#4a4740; --paving-line:#777163;
+    --road:#453f31; --road-line:#766c52;
+    --house:#3c4b5a; --house-line:#7d94aa; --garage:#5a4a34; --garage-line:#b08f63;
+    --terrace:#5a4733; --terrace-line:#c39a63; --garden:#5e3d33; --garden-line:#c67e65;
+    --green:#2f5a49; --green-line:#56a384; --kids:#52385d; --kids-line:#b57fae;
+    --water:#2e4f68; --water-line:#6ba3cf; --wood:#5a4229; --wood-line:#a9794a;
+    --tree:#45753a; --tree-line:#6fae5a;
+    --accent:#8fc06a; color-scheme:dark;
+  }}
+  :root[data-theme="dark"]{
+    --bg:#1b1d17; --panel:#24271f; --ink:#ece9df; --muted:#a3a695; --line:#3a3d32;
+    --lawn:#5f7a43; --lawn-line:#86a85f; --paving:#4a4740; --paving-line:#777163;
+    --road:#453f31; --road-line:#766c52;
+    --house:#3c4b5a; --house-line:#7d94aa; --garage:#5a4a34; --garage-line:#b08f63;
+    --terrace:#5a4733; --terrace-line:#c39a63; --garden:#5e3d33; --garden-line:#c67e65;
+    --green:#2f5a49; --green-line:#56a384; --kids:#52385d; --kids-line:#b57fae;
+    --water:#2e4f68; --water-line:#6ba3cf; --wood:#5a4229; --wood-line:#a9794a;
+    --tree:#45753a; --tree-line:#6fae5a;
+    --accent:#8fc06a; color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);margin:0;
+    font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;
+    padding-left:max(16px,env(safe-area-inset-left,0px));
+    padding-right:max(16px,env(safe-area-inset-right,0px));
+    padding-block:28px;}
+  .wrap{max-width:880px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+  header h1{font-family:var(--font-h);font-weight:700;font-size:clamp(26px,5vw,36px);
+    margin:0;letter-spacing:-.5px;text-wrap:balance}
+  header p{margin:.4em 0 0;color:var(--muted);max-width:62ch}
+  .plan{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:14px;overflow:hidden}
+  svg{display:block;width:100%;height:auto;max-width:100%}
+  .zlabel{font-family:var(--font-h);font-weight:600;fill:var(--ink)}
+  .zsub{fill:var(--muted);font-weight:500}
+  .road-lbl{fill:var(--road-line);font-weight:700;font-family:var(--font-h);letter-spacing:.04em}
+  .legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px 18px;
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .legend h2,.notes h2{font-family:var(--font-h);font-size:13px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 4px;grid-column:1/-1}
+  .li{display:flex;align-items:center;gap:10px;font-size:15px;min-width:0}
+  .sw{width:20px;height:20px;border-radius:5px;flex:0 0 auto;border:1.5px solid}
+  .notes{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .notes ul{margin:8px 0 0;padding-left:1.1em;display:flex;flex-direction:column;gap:7px}
+  .notes li{line-height:1.45}
+  .notes b{color:var(--accent)}
+  footer{color:var(--muted);font-size:13px;text-align:center}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Участок Celmiņu iela 37</h1>
+    <p>Схема зонирования, вид сверху, по генплану MBI. Угловой участок: Celmiņu iela справа (восток), заездная дорога с перекрёстком - снизу слева. Гараж слева от дома, парковка - возле гаража у заезда. Учтено то, что уже есть на участке. Размеры ориентировочные.</p>
+  </header>
+
+  <div class="plan">
+    <svg viewBox="0 0 840 820" role="img" aria-label="План углового участка Celmiņu 37">
+      <!-- plot boundary: corner lot, open south-west corner where the two roads meet -->
+      <polygon points="200,90 660,110 665,560 430,700 200,610" fill="none" stroke="var(--line)" stroke-width="3"/>
+      <!-- lawn fill -->
+      <polygon points="200,90 660,110 665,560 430,700 200,610" fill="var(--lawn)" stroke="none" opacity=".55"/>
+
+      <!-- Celmiņu iela (main street, east / right side) -->
+      <rect x="690" y="80" width="62" height="620" fill="var(--road)" stroke="var(--road-line)" stroke-width="2"/>
+      <text x="721" y="400" class="road-lbl" font-size="16" text-anchor="middle" transform="rotate(90 721 400)">Celmiņu iela</text>
+
+      <!-- access road + crossroad (south-west, with the entry) -->
+      <path d="M140,780 L140,650 Q140,560 300,560 L470,560 Q560,560 560,660 L560,780 Z"
+            fill="var(--road)" stroke="var(--road-line)" stroke-width="2"/>
+      <text x="330" y="748" class="road-lbl" font-size="15" text-anchor="middle">заездная дорога / перекрёсток</text>
+
+      <!-- garden beds along back/top border -->
+      <path d="M200,90 L660,110 L655,180 L210,160 Z" fill="var(--garden)" stroke="var(--garden-line)" stroke-width="2"/>
+      <text x="430" y="140" class="zlabel" font-size="16" text-anchor="middle">Сад / грядки</text>
+
+      <!-- house (18,63 x 15,82), center-east -->
+      <rect x="390" y="230" width="230" height="195" rx="3" fill="var(--house)" stroke="var(--house-line)" stroke-width="3"/>
+      <text x="505" y="318" class="zlabel" font-size="20" text-anchor="middle">Дом</text>
+      <text x="505" y="340" class="zsub" font-size="13" text-anchor="middle">18,63 × 15,82 м</text>
+      <!-- entrance / terrace toward the yard -->
+      <path d="M465,425 a40,24 0 0 0 80,0 Z" fill="var(--terrace)" stroke="var(--terrace-line)" stroke-width="2"/>
+      <text x="505" y="458" class="zsub" font-size="12" text-anchor="middle">вход</text>
+
+      <!-- garage (left of house, annex 6,72 wide) -->
+      <rect x="250" y="250" width="130" height="135" rx="3" fill="var(--garage)" stroke="var(--garage-line)" stroke-width="2.5"/>
+      <text x="315" y="312" class="zlabel" font-size="16" text-anchor="middle">Гараж</text>
+      <text x="315" y="332" class="zsub" font-size="12" text-anchor="middle">6,72 м</text>
+
+      <!-- wood shed near garage -->
+      <rect x="250" y="388" width="78" height="40" rx="3" fill="var(--wood)" stroke="var(--wood-line)" stroke-width="2"/>
+      <text x="289" y="413" class="zlabel" font-size="12" text-anchor="middle">Дрова</text>
+
+      <!-- PARKING next to the garage (down from garage, toward the access road) -->
+      <rect x="235" y="448" width="175" height="120" rx="6" fill="var(--paving)" stroke="var(--paving-line)" stroke-width="2.5"/>
+      <text x="322" y="500" class="zlabel" font-size="16" text-anchor="middle">Парковка</text>
+      <text x="322" y="520" class="zsub" font-size="12" text-anchor="middle">возле гаража</text>
+      <text x="322" y="538" class="zsub" font-size="12" text-anchor="middle">3–4 авто</text>
+      <!-- short apron from garage to parking -->
+      <rect x="275" y="430" width="80" height="22" fill="var(--paving)" stroke="var(--paving-line)" stroke-width="1.5"/>
+
+      <!-- BBQ pavilion 3x6 (sunny side, east near garden) -->
+      <rect x="620" y="250" width="40" height="78" rx="3" fill="var(--terrace)" stroke="var(--terrace-line)" stroke-width="2.5"/>
+      <text x="640" y="282" class="zlabel" font-size="11" text-anchor="middle">Навес</text>
+      <text x="640" y="297" class="zlabel" font-size="11" text-anchor="middle">3×6</text>
+      <text x="640" y="312" class="zsub" font-size="9" text-anchor="middle">барбекю</text>
+
+      <!-- existing greenhouse -->
+      <rect x="600" y="360" width="66" height="105" rx="33" fill="var(--green)" stroke="var(--green-line)" stroke-width="2"/>
+      <text x="633" y="408" class="zlabel" font-size="13" text-anchor="middle">Тепл.</text>
+      <text x="633" y="426" class="zsub" font-size="11" text-anchor="middle">есть</text>
+
+      <!-- kids / trampoline zone -->
+      <circle cx="560" cy="540" r="46" fill="var(--kids)" stroke="var(--kids-line)" stroke-width="2"/>
+      <text x="560" y="536" class="zlabel" font-size="13" text-anchor="middle">Детская</text>
+      <text x="560" y="554" class="zsub" font-size="11" text-anchor="middle">батут (есть)</text>
+
+      <!-- big pine to keep -->
+      <circle cx="300" cy="610" r="38" fill="var(--tree)" stroke="var(--tree-line)" stroke-width="2"/>
+      <text x="300" y="606" class="zlabel" font-size="12" text-anchor="middle" fill="#13330c">Сосна</text>
+      <text x="300" y="623" class="zsub" font-size="10" text-anchor="middle" fill="#13330c">сохранить</text>
+
+      <!-- lawn label -->
+      <text x="440" y="610" class="zlabel" font-size="19" text-anchor="middle">Газон</text>
+
+      <!-- drainage dotted around house -->
+      <path d="M385,225 L625,225 L625,430" fill="none" stroke="var(--water-line)" stroke-width="2.5" stroke-dasharray="3 6"/>
+      <text x="430" y="217" class="zsub" font-size="12">дренаж / ливнёвка</text>
+
+      <!-- hedge along both roads -->
+      <path d="M665,560 L430,700" fill="none" stroke="var(--lawn-line)" stroke-width="5" stroke-dasharray="1 8" stroke-linecap="round"/>
+      <path d="M660,110 L665,560" fill="none" stroke="var(--lawn-line)" stroke-width="5" stroke-dasharray="1 8" stroke-linecap="round"/>
+
+      <!-- compass -->
+      <g transform="translate(770,150)">
+        <circle r="26" fill="var(--panel)" stroke="var(--line)" stroke-width="1.5"/>
+        <path d="M0,-22 L5,0 L0,22 L-5,0 Z" fill="var(--accent)"/>
+        <text x="0" y="-29" class="zlabel" text-anchor="middle" font-size="12">С</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="legend">
+    <h2>Условные обозначения</h2>
+    <div class="li"><span class="sw" style="background:var(--house);border-color:var(--house-line)"></span>Дом</div>
+    <div class="li"><span class="sw" style="background:var(--garage);border-color:var(--garage-line)"></span>Гараж</div>
+    <div class="li"><span class="sw" style="background:var(--paving);border-color:var(--paving-line)"></span>Парковка возле гаража</div>
+    <div class="li"><span class="sw" style="background:var(--terrace);border-color:var(--terrace-line)"></span>Навес 3×6, барбекю</div>
+    <div class="li"><span class="sw" style="background:var(--green);border-color:var(--green-line)"></span>Теплица (есть)</div>
+    <div class="li"><span class="sw" style="background:var(--kids);border-color:var(--kids-line)"></span>Детская, батут (есть)</div>
+    <div class="li"><span class="sw" style="background:var(--lawn);border-color:var(--lawn-line)"></span>Газон</div>
+    <div class="li"><span class="sw" style="background:var(--garden);border-color:var(--garden-line)"></span>Сад и грядки</div>
+    <div class="li"><span class="sw" style="background:var(--tree);border-color:var(--tree-line)"></span>Сосна (сохранить)</div>
+    <div class="li"><span class="sw" style="background:var(--wood);border-color:var(--wood-line)"></span>Навес для дров</div>
+    <div class="li"><span class="sw" style="background:var(--water);border-color:var(--water-line)"></span>Дренаж, ливнёвка</div>
+    <div class="li"><span class="sw" style="background:var(--road);border-color:var(--road-line)"></span>Дороги (две стороны)</div>
+  </div>
+
+  <div class="notes">
+    <h2>Что учтено по генплану</h2>
+    <ul>
+      <li><b>Угловой участок:</b> Celmiņu iela справа (восток), заездная дорога с перекрёстком - снизу слева, там удобный въезд.</li>
+      <li><b>Парковка возле гаража</b> на 3–4 авто, прямо у въезда с заездной дороги - короткий путь от машины в гараж и дом. Брусчатка или бетон, работа для Darek.</li>
+      <li><b>Гараж слева от дома</b> (пристройка 6,72 по плану) - заезд с угла участка.</li>
+      <li><b>Навес 3×6 для барбекю</b> на солнечной стороне у газона и сада.</li>
+      <li><b>Теплица и батут уже есть</b> - оставил на схеме, при желании сдвинем.</li>
+      <li><b>Большую сосну сохранить</b> - взрослое дерево, даёт тень и вид.</li>
+      <li><b>Дренаж и ливнёвка</b> вокруг дома - заложить до газона и брусчатки.</li>
+      <li><b>Живая изгородь</b> вдоль обеих дорог - приватность от улицы.</li>
+    </ul>
+  </div>
+
+  <footer>По генплану MBI: дом 18,63 × 15,82 м, гараж-пристройка 6,72 м. Celmiņu iela с востока, перекрёсток с юго-запада. Схема не в точном масштабе.</footer>
+</div>
